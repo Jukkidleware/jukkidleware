@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Middleware – Legal</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #1a1a2e;
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      background: #fff;
+      border-bottom: 1px solid #e5e7eb;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-brand {
+      font-weight: 700;
+      font-size: 15px;
+      color: #1a1a2e;
+      margin-right: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-brand svg { flex-shrink: 0; }
+    .nav-link {
+      padding: 6px 16px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      color: #4b5563;
+      transition: background 0.15s, color 0.15s;
+    }
+    .nav-link:hover { background: #f3f4f6; color: #1a1a2e; }
+    .nav-link.active { background: #ede9fe; color: #5b21b6; }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+      color: #fff;
+      padding: 72px 24px;
+      text-align: center;
+    }
+    .hero h1 { font-size: clamp(22px, 4vw, 36px); font-weight: 800; margin-bottom: 12px; }
+    .hero p { font-size: 15px; color: #cbd5e1; max-width: 520px; margin: 0 auto 32px; line-height: 1.65; }
+    .hero-cards {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .hero-card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 12px;
+      padding: 20px 28px;
+      text-decoration: none;
+      color: #fff;
+      transition: background 0.2s, transform 0.2s;
+      min-width: 180px;
+    }
+    .hero-card:hover { background: rgba(255,255,255,0.16); transform: translateY(-2px); }
+    .hero-card-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+    .hero-card-sub { font-size: 13px; color: #94a3b8; }
+
+    /* CONTENT PAGES */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    .container {
+      max-width: 860px;
+      margin: 48px auto;
+      padding: 0 24px 80px;
+    }
+
+    .doc-header {
+      margin-bottom: 32px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+    .doc-header h2 { font-size: 26px; font-weight: 800; color: #1a1a2e; margin-bottom: 6px; }
+    .doc-header .meta { font-size: 13px; color: #6b7280; }
+
+    .section { margin-bottom: 32px; }
+    .section h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 10px;
+      padding-left: 12px;
+      border-left: 3px solid #7c3aed;
+    }
+    .section p { font-size: 14px; line-height: 1.75; color: #374151; margin-bottom: 8px; }
+    .section ul { list-style: none; padding: 0; margin: 0; }
+    .section ul li {
+      font-size: 14px;
+      line-height: 1.75;
+      color: #374151;
+      padding: 3px 0 3px 20px;
+      position: relative;
+    }
+    .section ul li::before {
+      content: "–";
+      position: absolute;
+      left: 4px;
+      color: #7c3aed;
+      font-weight: 700;
+    }
+
+    .sub-section { margin: 16px 0 0 0; }
+    .sub-section h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #374151;
+      margin-bottom: 8px;
+    }
+
+    /* FOOTER */
+    footer {
+      background: #1a1a2e;
+      color: #94a3b8;
+      text-align: center;
+      padding: 24px;
+      font-size: 13px;
+    }
+    footer a { color: #cbd5e1; text-decoration: none; }
+    footer a:hover { color: #fff; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <span class="nav-brand">
+      <svg width="22" height="22" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="32" height="32" rx="8" fill="#5b21b6"/>
+        <circle cx="9" cy="16" r="3" fill="white"/>
+        <circle cx="23" cy="9" r="3" fill="white"/>
+        <circle cx="23" cy="23" r="3" fill="white"/>
+        <line x1="11.5" y1="14.5" x2="20.5" y2="10.5" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+        <line x1="11.5" y1="17.5" x2="20.5" y2="21.5" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      Middleware
+    </span>
+    <a href="#home" class="nav-link active" onclick="showPage('home',this)">Home</a>
+    <a href="#tos" class="nav-link" onclick="showPage('tos',this)">Terms of Service</a>
+    <a href="#policy" class="nav-link" onclick="showPage('policy',this)">Privacy Policy</a>
+  </div>
+</nav>
+
+<!-- HOME PAGE -->
+<div id="home" class="page active">
+  <div class="hero">
+    <h1>Social Media Middleware</h1>
+    <p>This service connects your social media accounts to Jukkidleware (our Odoo middleware instance) for social marketing management. Please review our legal documents below.</p>
+    <div class="hero-cards">
+      <a href="#tos" class="hero-card" onclick="showPage('tos', document.querySelector('[href=\'#tos\']'))">
+        <div class="hero-card-title">Terms of Service</div>
+        <div class="hero-card-sub">Last updated June 29, 2026</div>
+      </a>
+      <a href="#policy" class="hero-card" onclick="showPage('policy', document.querySelector('[href=\'#policy\']'))">
+        <div class="hero-card-title">Privacy Policy</div>
+        <div class="hero-card-sub">PT Juke Solusi Teknologi</div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- TERMS OF SERVICE PAGE -->
+<div id="tos" class="page">
+  <div class="container">
+    <div class="doc-header">
+      <h2>Terms of Service</h2>
+      <span class="meta">Last Updated: June 29, 2026</span>
+    </div>
+
+    <div class="section">
+      <h3>1. Acceptance of Terms</h3>
+      <p>By connecting your social media account (including but not limited to TikTok) to Jukkidleware, you agree to comply with these Terms of Service and the respective platform's own Terms of Service. For TikTok integrations, you also explicitly agree to be bound by the TikTok Terms of Service.</p>
+    </div>
+
+    <div class="section">
+      <h3>2. Description of Service</h3>
+      <p>This integration allows you to manage social media content and direct messages through the Odoo Social Marketing module. We are not responsible for the content you publish or the messages you send.</p>
+    </div>
+
+    <div class="section">
+      <h3>3. User Responsibilities</h3>
+      <p>You are responsible for maintaining the security of your social media accounts and your Odoo login credentials. You must not use this service for any illegal or unauthorized purpose.</p>
+    </div>
+
+    <div class="section">
+      <h3>4. Limitation of Liability</h3>
+      <p>In no event shall Jukkidleware (PT Juke Solusi Teknologi) be liable for any damages arising out of the use or inability to use this integration.</p>
+    </div>
+
+    <div class="section">
+      <h3>5. Termination</h3>
+      <p>We reserve the right to terminate or suspend access to our service immediately, without prior notice, for any reason whatsoever.</p>
+    </div>
+
+    <div class="section">
+      <h3>6. Changes to Terms</h3>
+      <p>We reserve the right to modify these terms at any time. Your continued use of the service after changes constitutes acceptance of the new terms.</p>
+    </div>
+  </div>
+</div>
+
+<!-- PRIVACY POLICY PAGE -->
+<div id="policy" class="page">
+  <div class="container">
+    <div class="doc-header">
+      <h2>Privacy Policy</h2>
+      <span class="meta">PT Juke Solusi Teknologi &mdash; Social Media Middleware</span>
+    </div>
+
+    <div class="section">
+      <h3>1. Introduction</h3>
+      <p>This Privacy Policy describes how we collect, use, store, and protect information when you use our Social Media Middleware connected to Odoo ("Service").</p>
+      <p>This Service uses social media platform APIs and is connected to our registered developer applications.</p>
+      <p>By using the Service, you agree to the terms of this Privacy Policy.</p>
+    </div>
+
+    <div class="section">
+      <h3>2. Information We Collect</h3>
+
+      <div class="sub-section">
+        <h4>2.1 Information You Provide</h4>
+        <ul>
+          <li>Business name</li>
+          <li>Contact details (such as email or phone number)</li>
+          <li>Social media account information when you authorize access</li>
+          <li>Information entered into Odoo related to customers, campaigns, or interactions</li>
+        </ul>
+      </div>
+
+      <div class="sub-section">
+        <h4>2.2 Platform Data (Including TikTok)</h4>
+        <p>Through social media platform APIs (such as TikTok, Instagram, Facebook), we may process:</p>
+        <ul>
+          <li><strong>Basic Profile Information:</strong> Username, display name, avatar/profile picture, and unique account identifiers (e.g., TikTok Open ID).</li>
+          <li><strong>Content Data:</strong> Metadata of your videos, carousels, and posts (such as IDs, URLs, and captions).</li>
+          <li><strong>Engagement & Messaging Data:</strong> Comments, interactions, and direct messages sent to your social media business accounts, to enable real-time chat within Jukkidleware.</li>
+        </ul>
+        <p style="margin-top:10px;">We only access data that you explicitly authorize via the respective platform. For TikTok users, you can revoke access at any time through your TikTok account settings or by disconnecting the account within the Jukkidleware dashboard.</p>
+      </div>
+
+      <div class="sub-section">
+        <h4>2.3 System &amp; Odoo Data</h4>
+        <ul>
+          <li>Logs</li>
+          <li>Integration configuration details</li>
+          <li>API usage data</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>3. How We Use Your Information</h3>
+      <p>We use the collected data to:</p>
+      <ul>
+        <li>Provide platform–Odoo integration functionality</li>
+        <li>Display social media account data within Odoo</li>
+        <li>Enable interaction management (e.g., comments or engagement tracking, if applicable)</li>
+        <li>Support business operations and customer engagement</li>
+        <li>Maintain system performance and reliability</li>
+        <li>Ensure compliance with each platform's policies</li>
+      </ul>
+      <p style="margin-top:10px;">We do not use platform data for advertising, resale, or unauthorized profiling.</p>
+    </div>
+
+    <div class="section">
+      <h3>4. Data Storage &amp; Security</h3>
+      <ul>
+        <li>Data is stored securely within Odoo and/or your chosen hosting environment.</li>
+        <li>We implement industry-standard technical and organizational safeguards.</li>
+        <li>We only retain platform data as long as necessary to provide the Service.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h3>5. Sharing of Information</h3>
+      <p>We do not sell or share your data.</p>
+      <p>We may share data only with:</p>
+      <ul>
+        <li>Social media platforms, as required to provide API functionality</li>
+        <li>Infrastructure or hosting providers</li>
+        <li>Legal authorities if required by law</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h3>6. Your Rights</h3>
+      <p>Depending on your jurisdiction, you may request:</p>
+      <ul>
+        <li>Access to your data</li>
+        <li>Correction or deletion of your data</li>
+        <li>Restriction of processing</li>
+        <li>Withdrawal of consent</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h3>7. Third-Party Services</h3>
+      <p>This integration may use one or more of the following:</p>
+      <ul>
+        <li>Social media platform APIs (e.g., TikTok, Instagram, Facebook, X/Twitter)</li>
+        <li>Odoo platform (Odoo S.A.)</li>
+      </ul>
+      <p style="margin-top:10px;">Each service operates under its own privacy policy.</p>
+    </div>
+
+    <div class="section">
+      <h3>8. Children's Privacy</h3>
+      <p>This Service is not intended for individuals under 13 years of age.</p>
+      <p>We do not knowingly collect data from children.</p>
+    </div>
+
+    <div class="section">
+      <h3>9. Changes to This Policy</h3>
+      <p>We may update this Privacy Policy from time to time. Updates will be reflected on this page.</p>
+    </div>
+
+    <div class="section">
+      <h3>10. Contact Information</h3>
+      <p>If you have any questions regarding this Privacy Policy, you may contact:</p>
+      <p><strong>PT Juke Solusi Teknologi</strong></p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  &copy; 2026 PT Juke Solusi Teknologi &mdash;
+  <a href="#tos" onclick="showPage('tos', document.querySelector('[href=\'#tos\']'))">Terms of Service</a> &middot;
+  <a href="#policy" onclick="showPage('policy', document.querySelector('[href=\'#policy\']'))">Privacy Policy</a>
+</footer>
+
+<script>
+  function showPage(id, linkEl) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+    if (linkEl) linkEl.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Handle hash on load
+  window.addEventListener('DOMContentLoaded', () => {
+    const hash = window.location.hash.replace('#', '');
+    if (hash && document.getElementById(hash)) {
+      const link = document.querySelector(`[href="#${hash}"]`);
+      showPage(hash, link);
+    }
+  });
+</script>
+
+</body>
+</html>
