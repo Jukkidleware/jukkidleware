@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Jukkidleware</title>
+  <link rel="icon" type="image/png" href="/jukkidleware_icon.png">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -12,6 +13,8 @@
       background: #f7f8fa;
       color: #1a1a2e;
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
     /* NAV */
@@ -40,7 +43,6 @@
       align-items: center;
       gap: 8px;
     }
-    .nav-brand svg { flex-shrink: 0; }
     .nav-link {
       padding: 6px 16px;
       border-radius: 6px;
@@ -61,35 +63,32 @@
       text-align: center;
     }
     .hero h1 { font-size: clamp(22px, 4vw, 36px); font-weight: 800; margin-bottom: 12px; }
-    .hero p { font-size: 15px; color: #cbd5e1; max-width: 520px; margin: 0 auto 32px; line-height: 1.65; }
-    .hero-cards {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    .hero-card {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 12px;
-      padding: 20px 28px;
-      text-decoration: none;
-      color: #fff;
-      transition: background 0.2s, transform 0.2s;
-      min-width: 180px;
-    }
-    .hero-card:hover { background: rgba(255,255,255,0.16); transform: translateY(-2px); }
-    .hero-card-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
-    .hero-card-sub { font-size: 13px; color: #94a3b8; }
+    .hero p { font-size: 15px; color: #cbd5e1; max-width: 520px; margin: 0 auto 24px; line-height: 1.65; }
 
-    /* CONTENT PAGES */
-    .page { display: none; }
-    .page.active { display: block; }
+    .btn-hero-wa {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #25D366;
+      color: #fff;
+      font-weight: 700;
+      padding: 12px 28px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-size: 15px;
+      box-shadow: 0 4px 14px rgba(37, 211, 102, 0.4);
+      transition: transform 0.2s, background-color 0.2s;
+    }
+    .btn-hero-wa:hover {
+      background: #20bd5a;
+      transform: translateY(-2px);
+    }
 
     .container {
       max-width: 860px;
       margin: 48px auto;
       padding: 0 24px 80px;
+      flex: 1;
     }
 
     .doc-header {
@@ -98,7 +97,6 @@
       border-bottom: 2px solid #e5e7eb;
     }
     .doc-header h2 { font-size: 26px; font-weight: 800; color: #1a1a2e; margin-bottom: 6px; }
-    .doc-header .meta { font-size: 13px; color: #6b7280; }
 
     .section { margin-bottom: 32px; }
     .section h3 {
@@ -134,286 +132,6 @@
       margin-bottom: 8px;
     }
 
-    /* CONNECT PAGE STYLES */
-    .connect-card {
-      background: #fff;
-      border: 1px solid #e5e7eb;
-      border-radius: 16px;
-      padding: 32px;
-      box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
-      margin-bottom: 24px;
-      transition: box-shadow 0.2s, border-color 0.2s;
-    }
-    .connect-card:hover {
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
-      border-color: #d1d5db;
-    }
-    .connect-card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 16px;
-      margin-bottom: 20px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid #f3f4f6;
-    }
-    .connect-card-title-group {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-    .icon-badge {
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-    .icon-badge.whatsapp {
-      background: #e7fce9;
-      color: #25D366;
-    }
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 5px 12px;
-      border-radius: 9999px;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.3px;
-      text-transform: uppercase;
-    }
-    .badge-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-    }
-    .badge-disconnected {
-      background: #f1f5f9;
-      color: #475569;
-    }
-    .badge-disconnected .badge-dot {
-      background: #94a3b8;
-    }
-    .badge-connecting {
-      background: #fef3c7;
-      color: #92400e;
-    }
-    .badge-connecting .badge-dot {
-      background: #f59e0b;
-      animation: pulse 1.5s infinite;
-    }
-    .badge-connected {
-      background: #dcfce7;
-      color: #166534;
-    }
-    .badge-connected .badge-dot {
-      background: #22c55e;
-    }
-    .badge-error {
-      background: #fee2e2;
-      color: #991b1b;
-    }
-    .badge-error .badge-dot {
-      background: #ef4444;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(1.2); }
-    }
-
-    .btn-connect-whatsapp {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
-      color: #fff;
-      font-size: 15px;
-      font-weight: 600;
-      padding: 14px 28px;
-      border-radius: 10px;
-      border: none;
-      cursor: pointer;
-      transition: all 0.2s;
-      box-shadow: 0 4px 14px rgba(37, 211, 102, 0.35);
-      text-decoration: none;
-    }
-    .btn-connect-whatsapp:hover {
-      background: linear-gradient(135deg, #22bf5b 0%, #0e7065 100%);
-      transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(37, 211, 102, 0.45);
-    }
-    .btn-connect-whatsapp:active {
-      transform: translateY(1px);
-      box-shadow: 0 2px 8px rgba(37, 211, 102, 0.3);
-    }
-    .btn-connect-whatsapp:disabled {
-      background: #94a3b8;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-    }
-
-    .btn-secondary {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: #f3f4f6;
-      color: #374151;
-      font-size: 13px;
-      font-weight: 600;
-      padding: 8px 16px;
-      border-radius: 8px;
-      border: 1px solid #e5e7eb;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-    .btn-secondary:hover {
-      background: #e5e7eb;
-      color: #111827;
-    }
-
-    .btn-copy {
-      background: rgba(255,255,255,0.1);
-      color: #e2e8f0;
-      border: 1px solid rgba(255,255,255,0.2);
-      font-size: 12px;
-      padding: 4px 10px;
-      border-radius: 6px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      transition: all 0.15s;
-    }
-    .btn-copy:hover {
-      background: rgba(255,255,255,0.2);
-      color: #fff;
-    }
-
-    /* DEV RESPONSE INSPECTOR */
-    .dev-inspector {
-      background: #0f172a;
-      border: 1px solid #1e293b;
-      border-radius: 16px;
-      color: #f8fafc;
-      overflow: hidden;
-      margin-top: 32px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    }
-    .dev-inspector-header {
-      background: #1e293b;
-      padding: 16px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
-      border-bottom: 1px solid #334155;
-    }
-    .dev-tag {
-      background: #7c3aed;
-      color: #fff;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 3px 8px;
-      border-radius: 4px;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-    }
-    .dev-body {
-      padding: 24px;
-    }
-    .data-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-    .data-card {
-      background: #1e293b;
-      border: 1px solid #334155;
-      border-radius: 10px;
-      padding: 16px;
-      position: relative;
-    }
-    .data-card-label {
-      font-size: 11px;
-      font-weight: 600;
-      color: #94a3b8;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 6px;
-    }
-    .data-card-value {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 13px;
-      font-weight: 600;
-      color: #38bdf8;
-      word-break: break-all;
-    }
-    .data-card-value.empty {
-      color: #64748b;
-      font-style: italic;
-      font-weight: normal;
-    }
-
-    .json-viewer {
-      background: #090d16;
-      border: 1px solid #1e293b;
-      border-radius: 8px;
-      padding: 16px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 12px;
-      color: #a5f3fc;
-      max-height: 280px;
-      overflow-y: auto;
-      white-space: pre-wrap;
-      word-break: break-all;
-    }
-
-    .event-stream {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      max-height: 220px;
-      overflow-y: auto;
-    }
-    .event-item {
-      background: #1e293b;
-      border-left: 3px solid #38bdf8;
-      padding: 10px 14px;
-      border-radius: 0 6px 6px 0;
-      font-size: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .event-item-meta {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 11px;
-      color: #94a3b8;
-    }
-    .spinner {
-      display: inline-block;
-      width: 16px;
-      height: 16px;
-      border: 2px solid rgba(255,255,255,0.3);
-      border-radius: 50%;
-      border-top-color: #fff;
-      animation: spin 0.8s linear infinite;
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
     /* FOOTER */
     footer {
       background: #1a1a2e;
@@ -421,9 +139,25 @@
       text-align: center;
       padding: 24px;
       font-size: 13px;
+      margin-top: auto;
     }
     footer a { color: #cbd5e1; text-decoration: none; }
     footer a:hover { color: #fff; }
+  
+    .btn-login {
+      background: #5b21b6;
+      color: #fff !important;
+      padding: 6px 18px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      transition: background 0.15s;
+      margin-left: 8px;
+    }
+    .btn-login:hover {
+      background: #4c1d95;
+    }
   </style>
 </head>
 <body>
@@ -431,20 +165,14 @@
 <nav>
   <div class="nav-inner">
     <span class="nav-brand">
-      <svg width="22" height="22" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect width="32" height="32" rx="8" fill="#5b21b6"/>
-        <circle cx="9" cy="16" r="3" fill="white"/>
-        <circle cx="23" cy="9" r="3" fill="white"/>
-        <circle cx="23" cy="23" r="3" fill="white"/>
-        <line x1="11.5" y1="14.5" x2="20.5" y2="10.5" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
-        <line x1="11.5" y1="17.5" x2="20.5" y2="21.5" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
-      </svg>
+      <img src="/jukkidleware_icon.png" height="24" alt="Logo" style="vertical-align: middle; border-radius: 4px; object-fit: contain;">
       Jukkidleware
     </span>
-    <a href="#home" class="nav-link active" onclick="showPage('home',this)">Home</a>
-    <a href="#connect" class="nav-link" onclick="showPage('connect',this)">Connect</a>
-    <a href="#tos" class="nav-link" onclick="showPage('tos',this)">Terms of Service</a>
-    <a href="#policy" class="nav-link" onclick="showPage('policy',this)">Privacy Policy</a>
+    <a href="/" class="nav-link active">Home</a>
+    <a href="/connect/" class="nav-link">Connect WhatsApp</a>
+    <a href="/terms-of-service/" class="nav-link">Terms of Service</a>
+    <a href="/privacy-policy/" class="nav-link">Privacy Policy</a>
+    <a href="https://jukki.liea-research.my.id" class="btn-login" target="_blank" rel="noopener">Login</a>
   </div>
 </nav>
 
@@ -455,14 +183,14 @@
     <p style="font-size:18px; font-weight:600; margin-bottom:16px; color:#fff;">Connect Your Business Applications with Social Media</p>
     <p>Jukkidleware is an integration middleware that connects business applications such as Odoo with social media platforms, enabling businesses to manage social media activities through a centralized workflow.</p>
     
-    <div style="margin-top:24px;">
-      <a href="#connect" onclick="showPage('connect', document.querySelector('[href=\'#connect\']'))" style="display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.25); color:#fff; font-size:14px; font-weight:600; padding:10px 22px; border-radius:8px; text-decoration:none; transition:background 0.2s;">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-        Connect Meta Business &rarr;
+    <div style="margin-top: 24px; margin-bottom: 16px;">
+      <a href="/connect/" class="btn-hero-wa">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+        Connect WhatsApp Business
       </a>
     </div>
 
-    <p style="font-size:14px; color:#94a3b8; margin-top:28px;">Developed by PT Juke Solusi Teknologi</p>
+    <p style="font-size:14px; color:#94a3b8; margin-top:24px;">Developed by PT Juke Solusi Teknologi</p>
   </div>
 
   <div class="container" style="margin-top: 24px; padding-top: 24px;">
@@ -527,9 +255,8 @@ Business Application
         <p>Connect TikTok accounts with business workflows through TikTok's official APIs.</p>
       </div>
       <div class="sub-section">
-        <h4>Meta</h4>
-        <p>Connect supported Meta social media capabilities and WhatsApp Business with business applications.</p>
-        <p style="margin-top:6px;"><a href="#connect" onclick="showPage('connect', document.querySelector('[href=\'#connect\']'))" style="color:#7c3aed; font-weight:600; text-decoration:none; font-size:13px;">Connect WhatsApp Business &rarr;</a></p>
+        <h4>Meta / WhatsApp</h4>
+        <p>Connect supported Meta & WhatsApp Business capabilities with business applications.</p>
       </div>
       <div class="sub-section">
         <h4>Odoo</h4>
@@ -585,8 +312,8 @@ Business Application
       <p>Platform data is processed to provide the requested integration functionality and is not sold or used for unauthorized advertising or profiling.</p>
       
       <div style="margin-top:24px; font-weight:600;">
-        <a href="#policy" onclick="showPage('policy', document.querySelector('[href=\'#policy\']'))" style="color:#7c3aed; text-decoration:none; margin-right:24px;">Privacy Policy &rarr;</a>
-        <a href="#tos" onclick="showPage('tos', document.querySelector('[href=\'#tos\']'))" style="color:#7c3aed; text-decoration:none;">Terms of Service &rarr;</a>
+        <a href="/privacy-policy/" style="color:#7c3aed; text-decoration:none; margin-right:24px;">Privacy Policy &rarr;</a>
+        <a href="/terms-of-service/" style="color:#7c3aed; text-decoration:none;">Terms of Service &rarr;</a>
       </div>
     </div>
 
@@ -603,876 +330,23 @@ Business Application
   </div>
 </div>
 
-<!-- TERMS OF SERVICE PAGE -->
-<div id="tos" class="page">
-  <div class="container">
-    <div class="doc-header">
-      <h2>Terms of Service</h2>
-      <span class="meta">Last Updated: June 29, 2026</span>
-    </div>
-
-    <div class="section">
-      <h3>1. Acceptance of Terms</h3>
-      <p>By connecting your social media account, including but not limited to TikTok and Meta platforms, to Jukkidleware, you agree to comply with these Terms of Service and all applicable terms, policies, and guidelines of the respective third-party platforms.</p>
-      <p>By using Jukkidleware, you acknowledge that your use of any connected third-party platform remains subject to that platform's own terms and policies.</p>
-      <p>If you do not agree with these Terms of Service, please do not use or connect your social media accounts to Jukkidleware.</p>
-    </div>
-
-    <div class="section">
-      <h3>2. Description of Service</h3>
-      <p>Jukkidleware is an integration middleware developed and operated by <strong>PT Juke Solusi Teknologi</strong>.</p>
-      <p>Jukkidleware connects business applications, including Odoo, with supported social media platforms through their respective official APIs.</p>
-      <p>The service enables authorized users to manage supported social media activities through their connected business applications and workflows.</p>
-      <p>The availability of specific features depends on the capabilities, permissions, and technical requirements provided by each connected third-party platform.</p>
-      <p>Jukkidleware does not control the content that users create, publish, or manage through connected social media platforms.</p>
-    </div>
-
-    <div class="section">
-      <h3>3. User Responsibilities</h3>
-      <p>You are responsible for:</p>
-      <ul>
-        <li>Maintaining the security of your social media accounts and Odoo or business application credentials.</li>
-        <li>Ensuring that you have the legal right and appropriate authorization to connect any social media account to Jukkidleware.</li>
-        <li>Providing accurate information when using or configuring the service.</li>
-        <li>Using Jukkidleware only for lawful and authorized purposes.</li>
-        <li>Complying with the terms, policies, and guidelines of any third-party platform connected through Jukkidleware.</li>
-      </ul>
-      <p style="margin-top:16px;">You must not use Jukkidleware for any illegal, fraudulent, abusive, unauthorized, or harmful purpose.</p>
-      <p>You are responsible for all content, communications, and actions performed through your connected social media accounts.</p>
-    </div>
-
-    <div class="section">
-      <h3>4. Account Authorization</h3>
-      <p>Jukkidleware may require you to authorize access to your social media account through the official authorization mechanism provided by the respective third-party platform.</p>
-      <p>By granting authorization, you allow Jukkidleware to access the permissions and information necessary to provide the requested integration functionality.</p>
-      <p>You may revoke access to Jukkidleware through the applicable settings or authorization controls provided by the respective third-party platform.</p>
-      <p>Revoking authorization may prevent Jukkidleware from providing certain integration features.</p>
-    </div>
-
-    <div class="section">
-      <h3>5. Third-Party Platforms</h3>
-      <p>Jukkidleware integrates with third-party platforms, including social media platforms such as TikTok and Meta.</p>
-      <p>Your use of those platforms remains subject to their respective terms of service, policies, privacy practices, and other applicable requirements.</p>
-      <p>Jukkidleware does not control and is not responsible for:</p>
-      <ul>
-        <li>The availability or functionality of third-party platforms.</li>
-        <li>Changes to third-party APIs or technical requirements.</li>
-        <li>Changes to third-party platform policies.</li>
-        <li>Content moderation or enforcement decisions made by third-party platforms.</li>
-        <li>Restrictions, suspensions, or termination of third-party accounts.</li>
-        <li>Any content or communications created, published, or sent by users through third-party platforms.</li>
-      </ul>
-      <p style="margin-top:16px;">Changes to third-party APIs, permissions, policies, or platform availability may affect the functionality of Jukkidleware.</p>
-    </div>
-
-    <div class="section">
-      <h3>6. User Content</h3>
-      <p>You retain responsibility for the content that you create, upload, publish, or distribute through Jukkidleware and connected platforms.</p>
-      <p>You represent that you have the necessary rights, permissions, and authorization to use and distribute such content.</p>
-      <p>Jukkidleware does not claim ownership of your content.</p>
-      <p>Jukkidleware only processes user content as necessary to provide the integration functionality requested by the user.</p>
-    </div>
-
-    <div class="section">
-      <h3>7. Service Availability</h3>
-      <p>Jukkidleware is provided on an ongoing basis, but we do not guarantee that the service will always be available, uninterrupted, or error-free.</p>
-      <p>The availability of certain features may depend on:</p>
-      <ul>
-        <li>Third-party platform availability.</li>
-        <li>API availability and limitations.</li>
-        <li>Internet connectivity.</li>
-        <li>System maintenance.</li>
-        <li>Security requirements.</li>
-        <li>Changes to third-party platform policies or technical specifications.</li>
-      </ul>
-      <p style="margin-top:16px;">We may temporarily suspend or restrict access to the service when necessary for maintenance, security, technical reasons, or compliance with applicable requirements.</p>
-    </div>
-
-    <div class="section">
-      <h3>8. Limitation of Liability</h3>
-      <p>To the maximum extent permitted by applicable law, <strong>PT Juke Solusi Teknologi</strong> shall not be liable for any indirect, incidental, consequential, special, or other damages arising from or related to the use of, or inability to use, Jukkidleware.</p>
-      <p>Jukkidleware is not responsible for service interruptions, API changes, account restrictions, content moderation decisions, or other actions taken by third-party platforms.</p>
-      <p>Users remain responsible for their own social media accounts, credentials, content, and activities performed through connected platforms.</p>
-    </div>
-
-    <div class="section">
-      <h3>9. Termination and Suspension</h3>
-      <p>We may suspend or terminate access to Jukkidleware if you:</p>
-      <ul>
-        <li>Violate these Terms of Service.</li>
-        <li>Misuse the service.</li>
-        <li>Use the service for an illegal or unauthorized purpose.</li>
-        <li>Engage in activity that may harm Jukkidleware, its users, or third-party platforms.</li>
-        <li>Violate applicable third-party platform terms or policies.</li>
-      </ul>
-      <p style="margin-top:16px;">We may also suspend or restrict access when necessary to comply with applicable laws, security requirements, technical requirements, or requests from third-party platforms.</p>
-      <p>Where reasonably practicable, we may provide notice before terminating or suspending access.</p>
-    </div>
-
-    <div class="section">
-      <h3>10. Changes to These Terms</h3>
-      <p>We may update these Terms of Service from time to time to reflect changes to Jukkidleware, applicable laws, security requirements, or third-party platform requirements.</p>
-      <p>When changes are made, the <strong>Last Updated</strong> date at the top of this page will be updated.</p>
-      <p>Your continued use of Jukkidleware after the updated Terms of Service are published constitutes your acceptance of the revised terms.</p>
-    </div>
-
-    <div class="section">
-      <h3>11. Privacy</h3>
-      <p>Your use of Jukkidleware is also subject to our <strong>Privacy Policy</strong>, which explains how information is collected, used, stored, and processed in connection with the service.</p>
-      <p>Please review our Privacy Policy before using Jukkidleware.</p>
-      <p style="margin-top:16px;"><strong>Privacy Policy:</strong><br><a href="#policy" onclick="showPage('policy', document.querySelector('[href=\'#policy\']'))" style="color:#7c3aed; text-decoration:none;">https://jukkidleware.jukesolutions.site/#policy &nearr;</a></p>
-    </div>
-
-    <div class="section">
-      <h3>12. Contact Us</h3>
-      <p>If you have questions, concerns, or requests regarding these Terms of Service or Jukkidleware, please contact:</p>
-      <p style="margin-top:16px; font-weight:600; line-height:1.4;">PT Juke Solusi Teknologi<br><span style="font-weight:normal;">Indonesia</span></p>
-    </div>
-  </div>
-</div>
-
-<!-- PRIVACY POLICY PAGE -->
-<div id="policy" class="page">
-  <div class="container">
-    <div class="doc-header">
-      <h2>Privacy Policy</h2>
-      <span class="meta">Last Updated: June 29, 2026</span>
-    </div>
-
-    <div class="section">
-      <h3>1. Introduction</h3>
-      <p>This Privacy Policy explains how <strong>PT Juke Solusi Teknologi</strong> ("Juke", "we", "us", or "our") collects, uses, stores, and protects information when you use <strong>Jukkidleware</strong> (the "Service").</p>
-      <p>Jukkidleware is a social media integration middleware that connects business applications, including Odoo, with supported social media platforms through their official APIs.</p>
-      <p>Jukkidleware may connect to authorized social media accounts through the respective platform's official authorization and API mechanisms.</p>
-      <p>By using the Service or connecting a social media account to Jukkidleware, you acknowledge and agree to the practices described in this Privacy Policy.</p>
-    </div>
-
-    <div class="section">
-      <h3>2. Information We Collect</h3>
-
-      <div class="sub-section">
-        <h4>2.1 Information You Provide</h4>
-        <p>Depending on how you use the Service, we may collect or process:</p>
-        <ul>
-          <li>Business or organization name.</li>
-          <li>Contact information, such as email address or phone number.</li>
-          <li>Social media account information when you authorize access to an account.</li>
-          <li>Information entered or submitted through connected business applications and workflows.</li>
-        </ul>
-        <p style="margin-top:16px;">We only collect or process information that is necessary to provide the requested Service and integration functionality.</p>
-      </div>
-
-      <div class="sub-section">
-        <h4>2.2 Social Media Platform Data</h4>
-        <p>When you connect a social media account to Jukkidleware, we may access information made available through the applicable platform's official APIs and the permissions you authorize.</p>
-        <p>Depending on the platform and permissions granted, this may include:</p>
-        <ul>
-          <li><strong>Basic Profile Information:</strong> Information such as username, display name, profile picture, and platform-specific account identifiers.</li>
-          <li><strong>Content Information:</strong> Information associated with social media content that is processed through the integration, such as content identifiers, URLs, captions, or other relevant metadata.</li>
-          <li><strong>Engagement Information:</strong> Information related to supported social media activities and interactions when such functionality is enabled and authorized.</li>
-          <li><strong>Authorization Information:</strong> Information required to maintain the connection between your authorized social media account and Jukkidleware.</li>
-        </ul>
-        <p style="margin-top:16px;">The specific information accessed depends on the social media platform, the functionality being used, and the permissions you authorize.</p>
-        <p>Jukkidleware only accesses information that you explicitly authorize through the respective social media platform.</p>
-        <p>You may revoke access to Jukkidleware through the applicable account or authorization settings provided by the respective platform.</p>
-      </div>
-
-      <div class="sub-section">
-        <h4>2.3 System and Integration Data</h4>
-        <p>We may collect technical information necessary to operate and maintain the Service, including:</p>
-        <ul>
-          <li>System logs.</li>
-          <li>Integration configuration information.</li>
-          <li>API usage information.</li>
-          <li>Technical information necessary to maintain the connection between Jukkidleware, connected business applications, and supported social media platforms.</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="section">
-      <h3>3. How We Use Your Information</h3>
-      <p>We may use the information we collect to:</p>
-      <ul>
-        <li>Provide and operate Jukkidleware's integration functionality.</li>
-        <li>Connect authorized social media accounts with supported business applications, including Odoo.</li>
-        <li>Facilitate authorized communication between connected business applications and social media platforms.</li>
-        <li>Display or process social media information within connected business workflows where supported.</li>
-        <li>Support social media content and integration workflows authorized by the user.</li>
-        <li>Maintain and improve the performance, reliability, and security of the Service.</li>
-        <li>Troubleshoot technical issues and maintain integrations.</li>
-        <li>Provide customer and technical support.</li>
-        <li>Comply with applicable laws, regulations, and platform requirements.</li>
-      </ul>
-      <p style="margin-top:16px;">We do <strong>not</strong> sell your personal information.</p>
-      <p>We do not use information obtained through social media platform APIs for advertising, resale, or unauthorized profiling.</p>
-    </div>
-
-    <div class="section">
-      <h3>4. Data Storage and Security</h3>
-      <p>We take reasonable technical and organizational measures to protect information processed through Jukkidleware.</p>
-      <p>Information may be stored and processed within connected business applications, Jukkidleware infrastructure, and/or the hosting environment used to operate the Service, depending on the integration configuration.</p>
-      <p>We implement appropriate safeguards designed to protect information against unauthorized access, disclosure, alteration, or destruction.</p>
-      <p>We retain information only for as long as reasonably necessary to provide the Service, maintain the integration, comply with applicable legal obligations, resolve disputes, and enforce our agreements.</p>
-      <p>When information is no longer required, we may delete or anonymize it in accordance with our applicable retention practices.</p>
-    </div>
-
-    <div class="section">
-      <h3>5. Sharing of Information</h3>
-      <p>We do not sell your personal information.</p>
-      <p>We may disclose or transfer information only when necessary to provide the Service, operate our infrastructure, comply with applicable law, or perform functionality that you have authorized.</p>
-      <p>Information may be shared with:</p>
-      <ul>
-        <li><strong>Social media platforms</strong>, when necessary to provide functionality authorized by you through their official APIs.</li>
-        <li><strong>Business applications</strong>, including Odoo, when necessary to provide the requested integration functionality.</li>
-        <li><strong>Infrastructure and hosting providers</strong> that support the operation, security, and maintenance of Jukkidleware.</li>
-        <li><strong>Service providers</strong> that assist us in operating and maintaining the Service.</li>
-        <li><strong>Legal or regulatory authorities</strong>, when disclosure is required by applicable law, regulation, legal process, or valid governmental request.</li>
-      </ul>
-      <p style="margin-top:16px;">We take reasonable steps to ensure that third parties receiving information process it only for legitimate purposes related to the Service or as otherwise required by law.</p>
-    </div>
-
-    <div class="section">
-      <h3>6. Your Rights and Choices</h3>
-      <p>Depending on your jurisdiction and applicable law, you may have rights regarding your personal information, including:</p>
-      <ul>
-        <li>Accessing information we hold about you.</li>
-        <li>Requesting correction of inaccurate or incomplete information.</li>
-        <li>Requesting deletion of your information.</li>
-        <li>Requesting restriction of certain processing activities.</li>
-        <li>Withdrawing consent where processing is based on consent.</li>
-        <li>Revoking authorization granted to Jukkidleware through a connected social media platform.</li>
-        <li>Requesting information about how your data is processed.</li>
-      </ul>
-      <p style="margin-top:16px;">To exercise applicable rights or submit a privacy-related request, please contact us using the contact information provided in Section 10.</p>
-      <p>Please note that revoking access to a connected social media account may affect the availability of certain Jukkidleware features.</p>
-    </div>
-
-    <div class="section">
-      <h3>7. Third-Party Services</h3>
-      <p>Jukkidleware integrates with third-party services and platforms, which may include social media platforms such as:</p>
-      <ul>
-        <li>TikTok</li>
-        <li>Instagram</li>
-        <li>Facebook</li>
-        <li>Other supported platforms</li>
-      </ul>
-      <p style="margin-top:16px;">Jukkidleware may also integrate with business applications such as <strong>Odoo</strong>.</p>
-      <p>Each third-party service operates under its own terms of service, privacy policy, and data practices.</p>
-      <p>Jukkidleware does not control the privacy practices, policies, availability, or functionality of third-party services.</p>
-      <p>We encourage you to review the privacy policies and terms of service of any third-party platform you connect to Jukkidleware.</p>
-    </div>
-
-    <div class="section">
-      <h3>8. Children's Privacy</h3>
-      <p>Jukkidleware is not directed to children.</p>
-      <p>We do not knowingly collect personal information from children.</p>
-      <p>If you believe that a child has provided personal information through the Service, please contact us so that we can take appropriate action.</p>
-    </div>
-
-    <div class="section">
-      <h3>9. Changes to This Privacy Policy</h3>
-      <p>We may update this Privacy Policy from time to time to reflect changes to:</p>
-      <ul>
-        <li>Jukkidleware and its functionality.</li>
-        <li>Our data processing practices.</li>
-        <li>Applicable laws or regulations.</li>
-        <li>Third-party platform requirements.</li>
-        <li>Security and operational requirements.</li>
-      </ul>
-      <p style="margin-top:16px;">When changes are made, the <strong>Last Updated</strong> date at the top of this Privacy Policy will be updated.</p>
-      <p>We encourage you to review this Privacy Policy periodically to stay informed about how we handle information.</p>
-    </div>
-
-    <div class="section">
-      <h3>10. Contact Information</h3>
-      <p>If you have any questions, concerns, or requests regarding this Privacy Policy or how your information is handled through Jukkidleware, please contact:</p>
-      <p style="margin-top:16px; font-weight:600; line-height:1.4;">PT Juke Solusi Teknologi<br><span style="font-weight:normal;">Indonesia</span></p>
-    </div>
-  </div>
-</div>
-
-<!-- CONNECT PAGE -->
-<div id="connect" class="page">
-  <div class="hero">
-    <div style="display:inline-flex; align-items:center; gap:8px; background:rgba(37, 211, 102, 0.15); border:1px solid rgba(37, 211, 102, 0.3); color:#25D366; padding:6px 16px; border-radius:20px; font-size:13px; font-weight:600; margin-bottom:16px;">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-      Meta Business Integration
-    </div>
-    <h1 style="margin-bottom:10px;">Connect Your Business</h1>
-    <p style="font-size:16px; font-weight:500; color:#e2e8f0; max-width:580px; margin:0 auto 12px; line-height:1.6;">
-      Connect your business account to JUKE Business Connect to enable WhatsApp Business messaging and integration.
-    </p>
-    <p style="font-size:13px; color:#94a3b8; margin-top:12px;">
-      Powered by Meta Embedded Signup & Official WhatsApp Cloud API
-    </p>
-  </div>
-
-  <div class="container" style="margin-top: 32px; padding-top: 8px;">
-
-    <!-- WHATSAPP BUSINESS CONNECT CARD -->
-    <div class="connect-card">
-      <div class="connect-card-header">
-        <div class="connect-card-title-group">
-          <div class="icon-badge whatsapp">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
-            </svg>
-          </div>
-          <div>
-            <h3 style="font-size:20px; font-weight:700; color:#1a1a2e; margin-bottom:2px; border:none; padding:0;">WhatsApp Business</h3>
-            <p style="font-size:13px; color:#6b7280; margin:0;">Meta Business Solution Integration</p>
-          </div>
-        </div>
-
-        <div id="statusBadge" class="badge badge-disconnected">
-          <span class="badge-dot"></span>
-          <span id="statusBadgeText">Disconnected</span>
-        </div>
-      </div>
-
-      <div style="margin-bottom: 24px;">
-        <p style="font-size:15px; line-height:1.7; color:#374151; margin-bottom:12px;">
-          Connect your WhatsApp Business account using Meta's Embedded Signup. This authorization permits Jukkidleware to seamlessly integrate your WhatsApp Business Account (WABA) and phone numbers for messaging and customer communication.
-        </p>
-        
-        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:16px 20px; margin-top:16px;">
-          <h4 style="font-size:13px; font-weight:700; color:#334155; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:10px;">Embedded Signup Steps:</h4>
-          <ul style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:10px; font-size:13px; color:#475569;">
-            <li style="padding-left:16px;">1. Select or create Meta Business Account</li>
-            <li style="padding-left:16px;">2. Choose or create WhatsApp Business Account</li>
-            <li style="padding-left:16px;">3. Register & verify your business phone number</li>
-            <li style="padding-left:16px;">4. Grant permissions to Jukkidleware automatically</li>
-          </ul>
-        </div>
-      </div>
-
-      <div style="display:flex; flex-wrap:wrap; align-items:center; gap:12px;">
-        <button id="btnConnectWA" class="btn-connect-whatsapp" onclick="launchWhatsAppSignup()">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
-          </svg>
-          <span id="btnConnectWAText">Connect WhatsApp Business</span>
-        </button>
-
-        <button class="btn-secondary" onclick="resetConnectionState()" title="Reset local state">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-          Reset
-        </button>
-      </div>
-    </div>
-
-    <!-- DEVELOPMENT RESPONSE & SESSION INSPECTOR -->
-    <div class="dev-inspector">
-      <div class="dev-inspector-header">
-        <div style="display:flex; align-items:center; gap:10px;">
-          <span class="dev-tag">Frontend Response</span>
-          <span style="font-weight:700; font-size:14px; color:#f1f5f9;">Embedded Signup Real-Time Session Inspector</span>
-        </div>
-        <div style="display:flex; align-items:center; gap:8px;">
-          <button class="btn-copy" onclick="copyFullResponsePayload()">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-            <span id="copyPayloadText">Copy JSON</span>
-          </button>
-          <button class="btn-copy" onclick="simulateSuccessResponse()" title="Simulate sample Embedded Signup response for development inspection">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-            Simulate FE Response
-          </button>
-        </div>
-      </div>
-
-      <div class="dev-body">
-        <!-- Live Extracted Data Grid -->
-        <div class="data-grid">
-          <div class="data-card">
-            <div class="data-card-label">WhatsApp Business Account ID (WABA ID)</div>
-            <div id="displayWabaId" class="data-card-value empty">Not Connected</div>
-          </div>
-          <div class="data-card">
-            <div class="data-card-label">Phone Number ID</div>
-            <div id="displayPhoneId" class="data-card-value empty">Not Connected</div>
-          </div>
-          <div class="data-card">
-            <div class="data-card-label">Integration Status</div>
-            <div id="displayStatus" class="data-card-value empty">disconnected</div>
-          </div>
-          <div class="data-card">
-            <div class="data-card-label">Last Updated</div>
-            <div id="displayTimestamp" class="data-card-value empty">-</div>
-          </div>
-        </div>
-
-        <!-- Auth Code Box -->
-        <div class="data-card" style="margin-bottom:20px;">
-          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
-            <div class="data-card-label" style="margin:0;">Facebook Auth Code (response.authResponse.code)</div>
-            <button class="btn-copy" onclick="copyAuthCode()" id="btnCopyCode" style="padding:2px 8px; font-size:11px;">
-              Copy Code
-            </button>
-          </div>
-          <div id="displayAuthCode" class="data-card-value empty" style="font-size:12px; max-height:60px; overflow-y:auto;">None</div>
-        </div>
-
-        <!-- Section: Live MessageEvent Logs & Full JSON Payload -->
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:16px;">
-          <!-- Message Events Stream -->
-          <div>
-            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
-              <span style="font-size:12px; font-weight:700; color:#cbd5e1; text-transform:uppercase; letter-spacing:0.5px;">Embedded Signup Message Events</span>
-              <span id="eventCountBadge" style="font-size:11px; color:#94a3b8; background:rgba(255,255,255,0.06); padding:2px 8px; border-radius:10px;">0 events</span>
-            </div>
-            <div id="eventStreamContainer" class="event-stream">
-              <div style="color:#64748b; font-size:12px; font-style:italic; padding:12px; background:#090d16; border-radius:8px; border:1px solid #1e293b; text-align:center;">
-                Awaiting events from Embedded Signup window (window.addEventListener('message'))...
-              </div>
-            </div>
-          </div>
-
-          <!-- Raw JSON Viewer -->
-          <div>
-            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
-              <span style="font-size:12px; font-weight:700; color:#cbd5e1; text-transform:uppercase; letter-spacing:0.5px;">Current State JSON Payload</span>
-              <span style="font-size:11px; color:#38bdf8;">state: whatsappConnection</span>
-            </div>
-            <pre id="jsonViewer" class="json-viewer">{
-  "status": "disconnected",
-  "wabaId": null,
-  "phoneNumberId": null,
-  "authCode": null,
-  "sessionInfo": null
-}</pre>
-          </div>
-        </div>
-
-        <!-- Meta Backend Exchange Reference -->
-        <div style="margin-top:20px; background:#090d16; border:1px solid #1e293b; border-radius:8px; padding:14px 16px;">
-          <div style="font-size:12px; font-weight:700; color:#cbd5e1; margin-bottom:6px; display:flex; align-items:center; gap:6px;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-            Backend Server-to-Server Token Exchange Reference:
-          </div>
-          <p style="font-size:12px; color:#94a3b8; margin-bottom:8px; line-height:1.5;">
-            After receiving the <code>code</code> in frontend, send it to your backend. The backend exchanges the code for a permanent System User access token via Meta Graph API:
-          </p>
-          <pre style="font-family:ui-monospace, monospace; font-size:11px; color:#a5f3fc; background:#040711; padding:10px; border-radius:6px; overflow-x:auto; line-height:1.4;">POST https://graph.facebook.com/v21.0/oauth/access_token
-  ?client_id=1444990570826574
-  &amp;client_secret=07bf8b55a08aadbf9153ff15bdd7331d
-  &amp;code={AUTH_CODE_FROM_FE}</pre>
-        </div>
-
-      </div>
-    </div>
-
-  </div>
-</div>
-
 <footer>
   <div style="margin-bottom:16px;">
     <strong style="color:#fff; display:block; margin-bottom:4px;">Jukkidleware</strong>
     Social Media Integration Middleware
   </div>
   <div style="margin-bottom:16px; font-family:monospace; font-size:14px; background:rgba(255,255,255,0.05); display:inline-block; padding:8px 12px; border-radius:6px;">
-    <a href="#home" onclick="showPage('home', document.querySelector('[href=\'#home\']'))">Home</a> | 
-    <a href="#connect" onclick="showPage('connect', document.querySelector('[href=\'#connect\']'))">Connect</a> | 
-    <a href="#home" onclick="showPage('home', document.querySelector('[href=\'#home\']'))">Integrations</a> | 
-    <a href="#home" onclick="showPage('home', document.querySelector('[href=\'#home\']'))">About</a> | 
-    <a href="#policy" onclick="showPage('policy', document.querySelector('[href=\'#policy\']'))">Privacy Policy</a> | 
-    <a href="#tos" onclick="showPage('tos', document.querySelector('[href=\'#tos\']'))">Terms of Service</a>
+    <a href="/">Home</a> | 
+    <a href="/connect/">Connect WhatsApp</a> | 
+    <a href="/">Integrations</a> | 
+    <a href="/">About</a> | 
+    <a href="/privacy-policy/">Privacy Policy</a> | 
+    <a href="/terms-of-service/">Terms of Service</a>
   </div>
   <div style="color:#94a3b8; font-family:monospace; font-size:14px; background:rgba(255,255,255,0.05); display:inline-block; padding:8px 12px; border-radius:6px;">
     &copy; 2026 PT Juke Solusi Teknologi
   </div>
 </footer>
 
-<!-- META JAVASCRIPT SDK INITIALIZATION -->
-<script>
-  // Meta Configuration
-  const META_CONFIG = {
-    appId: '1444990570826574',
-    appSecret: '07bf8b55a08aadbf9153ff15bdd7331d',
-    configId: '4648779102017732',
-    version: 'v21.0'
-  };
-
-  // Local Application State for WhatsApp Connection
-  let whatsappConnection = {
-    wabaId: null,
-    phoneNumberId: null,
-    status: 'disconnected', // 'disconnected' | 'connecting' | 'connected' | 'error'
-    authCode: null,
-    authResponse: null,
-    sessionEvents: [],
-    lastEvent: null,
-    updatedAt: null,
-    errorMessage: null
-  };
-
-  let metaSdkReady = false;
-
-  // Load Meta JavaScript SDK as per Meta documentation
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId            : META_CONFIG.appId,
-      autoLogAppEvents : true,
-      xfbml            : true,
-      version          : META_CONFIG.version
-    });
-    metaSdkReady = true;
-    console.log('[Meta SDK] Inisialisasi SDK berhasil (v21.0, App ID: ' + META_CONFIG.appId + ')');
-  };
-
-  // Asynchronously inject Facebook SDK script (singleton guard)
-  (function(d, s, id){
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) { return; }
-    js = d.createElement(s); js.id = id;
-    js.src = "https://connect.facebook.net/en_US/sdk.js";
-    fjs.parentNode.insertBefore(js, fjs);
-  }(document, 'script', 'facebook-jssdk'));
-
-  // 4. Listen for Embedded Signup Session Information via MessageEvent
-  window.addEventListener('message', (event) => {
-    // Validasi origin: hanya terima pesan dari domain Facebook / Meta atau origin lokal
-    if (!event.origin || (!event.origin.includes('facebook.com') && !event.origin.includes('fb.com') && !event.origin.includes(window.location.origin))) {
-      return;
-    }
-
-    let data = event.data;
-    if (typeof data === 'string') {
-      try {
-        data = JSON.parse(data);
-      } catch (e) {
-        // Bukan format JSON, abaikan
-        return;
-      }
-    }
-
-    if (!data || typeof data !== 'object') return;
-
-    // Filter event WhatsApp Embedded Signup
-    const isWaSignupEvent = data.type === 'WA_EMBEDDED_SIGNUP' || 
-                            data.event === 'FINISH' || 
-                            data.event === 'CANCEL' || 
-                            data.event === 'ERROR' || 
-                            Boolean(data.waba_id || data.phone_number_id || (data.data && (data.data.waba_id || data.data.phone_number_id)));
-
-    if (isWaSignupEvent) {
-      console.log('[Meta Embedded Signup Event]', data);
-
-      const eventRecord = {
-        timestamp: new Date().toLocaleTimeString(),
-        origin: event.origin,
-        event: data.event || data.type || 'SESSION_UPDATE',
-        payload: data
-      };
-
-      whatsappConnection.sessionEvents.unshift(eventRecord);
-
-      // Extract WABA ID & Phone Number ID
-      const extractedWabaId = data.data?.waba_id || data.waba_id || (data.data?.account_id);
-      const extractedPhoneId = data.data?.phone_number_id || data.phone_number_id;
-
-      if (extractedWabaId) whatsappConnection.wabaId = extractedWabaId;
-      if (extractedPhoneId) whatsappConnection.phoneNumberId = extractedPhoneId;
-
-      if (data.event === 'FINISH') {
-        whatsappConnection.status = 'connected';
-        whatsappConnection.lastEvent = 'FINISH';
-      } else if (data.event === 'CANCEL') {
-        if (whatsappConnection.status === 'connecting') {
-          whatsappConnection.status = 'disconnected';
-        }
-        whatsappConnection.lastEvent = 'CANCEL';
-      } else if (data.event === 'ERROR') {
-        whatsappConnection.status = 'error';
-        whatsappConnection.lastEvent = 'ERROR';
-        whatsappConnection.errorMessage = data.data?.error_message || data.error || 'Embedded signup error';
-      }
-
-      whatsappConnection.updatedAt = new Date().toISOString();
-      renderConnectionState();
-    }
-  });
-
-  // 5. Facebook for Business Login Callback
-  const fbLoginCallback = (response) => {
-    console.log('[Meta FB.login Callback]', response);
-    whatsappConnection.authResponse = response;
-    whatsappConnection.updatedAt = new Date().toISOString();
-
-    if (response && response.authResponse) {
-      const code = response.authResponse.code;
-      whatsappConnection.authCode = code;
-      whatsappConnection.status = 'connected';
-      whatsappConnection.errorMessage = null;
-      console.log('[Meta Auth Code]', code);
-      // Di tahap produksi, code dikirim ke backend untuk pertukaran server-to-server
-    } else {
-      if (response && response.status === 'unknown') {
-        whatsappConnection.status = 'disconnected';
-      } else {
-        whatsappConnection.status = 'disconnected';
-        whatsappConnection.errorMessage = 'Login dibatalkan atau ditutup oleh pengguna.';
-      }
-    }
-
-    renderConnectionState();
-  };
-
-  // Trigger WhatsApp Embedded Signup flow
-  function launchWhatsAppSignup() {
-    if (typeof FB === 'undefined') {
-      alert('Meta JavaScript SDK sedang dimuat. Pastikan koneksi internet aktif dan coba lagi sebentar lagi.');
-      return;
-    }
-
-    whatsappConnection.status = 'connecting';
-    whatsappConnection.errorMessage = null;
-    renderConnectionState();
-
-    FB.login(
-      function(response) {
-        fbLoginCallback(response);
-      },
-      {
-        config_id: META_CONFIG.configId,
-        response_type: 'code',
-        override_default_response_type: true,
-        extras: {
-          setup: {}
-        }
-      }
-    );
-  }
-
-  // Update DOM / Frontend UI Response View
-  function renderConnectionState() {
-    const statusBadge = document.getElementById('statusBadge');
-    const statusBadgeText = document.getElementById('statusBadgeText');
-    const btnConnectWA = document.getElementById('btnConnectWA');
-    const btnConnectWAText = document.getElementById('btnConnectWAText');
-
-    const displayWabaId = document.getElementById('displayWabaId');
-    const displayPhoneId = document.getElementById('displayPhoneId');
-    const displayStatus = document.getElementById('displayStatus');
-    const displayTimestamp = document.getElementById('displayTimestamp');
-    const displayAuthCode = document.getElementById('displayAuthCode');
-    const jsonViewer = document.getElementById('jsonViewer');
-    const eventStreamContainer = document.getElementById('eventStreamContainer');
-    const eventCountBadge = document.getElementById('eventCountBadge');
-
-    if (!statusBadge) return;
-
-    // Status classes
-    statusBadge.className = 'badge';
-    if (whatsappConnection.status === 'connected') {
-      statusBadge.classList.add('badge-connected');
-      statusBadgeText.textContent = 'Connected';
-      btnConnectWA.disabled = false;
-      btnConnectWAText.textContent = 'Reconnect / Update WhatsApp';
-    } else if (whatsappConnection.status === 'connecting') {
-      statusBadge.classList.add('badge-connecting');
-      statusBadgeText.textContent = 'Connecting...';
-      btnConnectWA.disabled = true;
-      btnConnectWAText.innerHTML = '<span class="spinner"></span> Connecting to Meta...';
-    } else if (whatsappConnection.status === 'error') {
-      statusBadge.classList.add('badge-error');
-      statusBadgeText.textContent = 'Error';
-      btnConnectWA.disabled = false;
-      btnConnectWAText.textContent = 'Retry Connect WhatsApp';
-    } else {
-      statusBadge.classList.add('badge-disconnected');
-      statusBadgeText.textContent = 'Disconnected';
-      btnConnectWA.disabled = false;
-      btnConnectWAText.textContent = 'Connect WhatsApp Business';
-    }
-
-    // Update Values in cards
-    if (whatsappConnection.wabaId) {
-      displayWabaId.textContent = whatsappConnection.wabaId;
-      displayWabaId.classList.remove('empty');
-      displayWabaId.style.color = '#4ade80';
-    } else {
-      displayWabaId.textContent = 'Not Connected';
-      displayWabaId.classList.add('empty');
-      displayWabaId.style.color = '';
-    }
-
-    if (whatsappConnection.phoneNumberId) {
-      displayPhoneId.textContent = whatsappConnection.phoneNumberId;
-      displayPhoneId.classList.remove('empty');
-      displayPhoneId.style.color = '#4ade80';
-    } else {
-      displayPhoneId.textContent = 'Not Connected';
-      displayPhoneId.classList.add('empty');
-      displayPhoneId.style.color = '';
-    }
-
-    displayStatus.textContent = whatsappConnection.status;
-    displayStatus.className = 'data-card-value';
-    if (whatsappConnection.status === 'connected') displayStatus.style.color = '#4ade80';
-    else if (whatsappConnection.status === 'connecting') displayStatus.style.color = '#f59e0b';
-    else if (whatsappConnection.status === 'error') displayStatus.style.color = '#ef4444';
-    else displayStatus.style.color = '#94a3b8';
-
-    displayTimestamp.textContent = whatsappConnection.updatedAt ? new Date(whatsappConnection.updatedAt).toLocaleTimeString() : '-';
-    displayTimestamp.classList.remove('empty');
-
-    if (whatsappConnection.authCode) {
-      displayAuthCode.textContent = whatsappConnection.authCode;
-      displayAuthCode.classList.remove('empty');
-      displayAuthCode.style.color = '#38bdf8';
-    } else {
-      displayAuthCode.textContent = 'None (Waiting for Embedded Signup completion)';
-      displayAuthCode.classList.add('empty');
-      displayAuthCode.style.color = '';
-    }
-
-    // JSON Viewer
-    const cleanState = {
-      status: whatsappConnection.status,
-      wabaId: whatsappConnection.wabaId,
-      phoneNumberId: whatsappConnection.phoneNumberId,
-      authCode: whatsappConnection.authCode,
-      lastEvent: whatsappConnection.lastEvent,
-      updatedAt: whatsappConnection.updatedAt,
-      errorMessage: whatsappConnection.errorMessage,
-      authResponse: whatsappConnection.authResponse,
-      sessionEventsReceived: whatsappConnection.sessionEvents.length
-    };
-    jsonViewer.textContent = JSON.stringify(cleanState, null, 2);
-
-    // Event Stream Log
-    eventCountBadge.textContent = `${whatsappConnection.sessionEvents.length} events`;
-    if (whatsappConnection.sessionEvents.length === 0) {
-      eventStreamContainer.innerHTML = `
-        <div style="color:#64748b; font-size:12px; font-style:italic; padding:12px; background:#090d16; border-radius:8px; border:1px solid #1e293b; text-align:center;">
-          Awaiting events from Embedded Signup window (window.addEventListener('message'))...
-        </div>`;
-    } else {
-      eventStreamContainer.innerHTML = whatsappConnection.sessionEvents.map((evt, idx) => `
-        <div class="event-item">
-          <div class="event-item-meta">
-            <span style="color:#38bdf8; font-weight:700;">#${whatsappConnection.sessionEvents.length - idx}</span>
-            <span>[${evt.timestamp}]</span>
-            <span style="background:rgba(56,189,248,0.15); color:#38bdf8; padding:1px 6px; border-radius:4px; font-weight:600;">${evt.event}</span>
-            <span style="color:#64748b; font-size:10px;">${evt.origin}</span>
-          </div>
-          <pre style="margin:0; font-size:11px; color:#e2e8f0; max-height:80px; overflow-y:auto; font-family:ui-monospace, monospace;">${JSON.stringify(evt.payload, null, 2)}</pre>
-        </div>
-      `).join('');
-    }
-  }
-
-  // Reset State
-  function resetConnectionState() {
-    whatsappConnection = {
-      wabaId: null,
-      phoneNumberId: null,
-      status: 'disconnected',
-      authCode: null,
-      authResponse: null,
-      sessionEvents: [],
-      lastEvent: null,
-      updatedAt: new Date().toISOString(),
-      errorMessage: null
-    };
-    renderConnectionState();
-  }
-
-  // Simulate success for frontend development inspection
-  function simulateSuccessResponse() {
-    const mockWabaId = '109823485721904';
-    const mockPhoneId = '104827593820194';
-    const mockCode = 'AQD_7xK89sL...' + Math.random().toString(36).substring(2, 10);
-
-    // Simulate session event
-    const mockEvent = {
-      type: 'WA_EMBEDDED_SIGNUP',
-      event: 'FINISH',
-      data: {
-        phone_number_id: mockPhoneId,
-        waba_id: mockWabaId,
-        current_step: 'COMPLETED'
-      }
-    };
-
-    window.postMessage(JSON.stringify(mockEvent), window.location.origin);
-
-    // Simulate FB.login callback
-    fbLoginCallback({
-      authResponse: {
-        code: mockCode,
-        status: 'connected',
-        expires_in: 5184000
-      },
-      status: 'connected'
-    });
-  }
-
-  // Clipboard Helpers
-  function copyAuthCode() {
-    if (!whatsappConnection.authCode) {
-      alert('Belum ada Auth Code yang diterima.');
-      return;
-    }
-    navigator.clipboard.writeText(whatsappConnection.authCode).then(() => {
-      const btn = document.getElementById('btnCopyCode');
-      btn.textContent = 'Copied!';
-      setTimeout(() => { btn.textContent = 'Copy Code'; }, 2000);
-    });
-  }
-
-  function copyFullResponsePayload() {
-    const payload = JSON.stringify(whatsappConnection, null, 2);
-    navigator.clipboard.writeText(payload).then(() => {
-      const btnText = document.getElementById('copyPayloadText');
-      btnText.textContent = 'Copied!';
-      setTimeout(() => { btnText.textContent = 'Copy JSON'; }, 2000);
-    });
-  }
-
-  // Page Routing & Navigation
-  function showPage(id, linkEl) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    const targetPage = document.getElementById(id);
-    if (targetPage) {
-      targetPage.classList.add('active');
-    }
-    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-    if (linkEl) {
-      linkEl.classList.add('active');
-    } else {
-      const matchingLink = document.querySelector(`.nav-link[href="#${id}"]`) || document.querySelector(`.nav-link[onclick*="'${id}'"]`);
-      if (matchingLink) matchingLink.classList.add('active');
-    }
-    window.location.hash = '#' + id;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  function handleRoute() {
-    let hash = window.location.hash.replace('#', '');
-    const path = window.location.pathname.replace(/^\/+|\/+$/g, '');
-    
-    // Mendukung /connect dan #connect
-    if (!hash && (path === 'connect' || path === 'tos' || path === 'policy' || path === 'home')) {
-      hash = path;
-    }
-
-    if (hash && document.getElementById(hash)) {
-      const link = document.querySelector(`[href="#${hash}"]`);
-      showPage(hash, link);
-    } else {
-      showPage('home', document.querySelector('[href="#home"]'));
-    }
-  }
-
-  window.addEventListener('DOMContentLoaded', () => {
-    handleRoute();
-    renderConnectionState();
-  });
-  window.addEventListener('hashchange', handleRoute);
-  window.addEventListener('popstate', handleRoute);
-</script>
-
 </body>
 </html>
-
